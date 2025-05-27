@@ -1,0 +1,13 @@
+int x;
+int y;
+
+int suma(int a, int b) {
+  return a + b;
+}
+
+int main(void) {
+  x = 5;
+  y = suma(x, 3);
+  return output(y);
+
+}
