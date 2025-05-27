@@ -26,7 +26,7 @@ def salir_tabla():
     tabla_stack.pop()
 
 
-def insertar(nombre, tipo, linea, es_array=False, tam=None):
+def insertar(nombre, tipo, linea, es_array=False, tam=None, param=False):
     actual = tabla_stack[-1]
     scope_name = actual['nombre']
     if scope_name not in variables_por_scope:
@@ -40,7 +40,8 @@ def insertar(nombre, tipo, linea, es_array=False, tam=None):
         'tipo': tipo.name if isinstance(tipo, TokenType) else str(tipo),
         'linea': linea if linea is not None else '?',
         'es_array': es_array,
-        'tam': tam if isinstance(tam, int) else None
+        'tam': tam if isinstance(tam, int) else None,
+        'param': param
     })
 
 
@@ -81,7 +82,7 @@ def recorrer_arbol(nodo, scope='global', es_declaracion=False):
                 es_array = param.tam == 'arreglo' or (isinstance(
                     param.tam, str) and param.tam.endswith('[]'))
                 insertar(param.nombre, param.tipo, getattr(
-                    param, 'lineno', '?'), es_array)
+                    param, 'lineno', '?'), es_array, param= True)
         # Recorrer declaraciones y sentencias del cuerpo de la función
         for decl in nodo.cuerpo.decl:
             recorrer_arbol(decl, nodo.nombre, es_declaracion=True)
@@ -119,7 +120,7 @@ def recorrer_arbol(nodo, scope='global', es_declaracion=False):
             es_array = nodo.tam == 'arreglo' or (
                 isinstance(nodo.tam, str) and nodo.tam.endswith('[]'))
             insertar(nodo.nombre, nodo.tipo, getattr(
-                nodo, 'lineno', '?'), es_array)
+                nodo, 'lineno', '?'), es_array, param=True)
 
     elif nodo.nodoTipo == 'return':
         recorrer_arbol(nodo.retorno, scope)
