@@ -10,9 +10,9 @@ sub $sp, $sp, 8
 sw $ra, 4($sp)
 sw $fp, 0($sp)
 move $fp, $sp
-sub $sp, $sp, 8
-lw $t0, -4($fp)  # cargar var local a
-lw $t1, -8($fp)  # cargar var local b
+
+lw $t0, 8($fp)  # cargar var/param a
+lw $t1, 12($fp)  # cargar var/param b
 add $t2, $t0, $t1
 move $v0, $t2  # return valor
 move $sp, $fp
@@ -20,7 +20,7 @@ lw $fp, 0($sp)
 lw $ra, 4($sp)
 add $sp, $sp, 8
 jr $ra
-add $sp, $sp, 8
+
 main:
 sub $sp, $sp, 8
 sw $ra, 4($sp)
