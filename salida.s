@@ -2,6 +2,9 @@
 x: .word 0
 y: .word 0
 .text
+.globl main
+j main
+nop
 suma:
 sub $sp, $sp, 8
 sw $ra, 4($sp)
@@ -18,7 +21,6 @@ lw $ra, 4($sp)
 add $sp, $sp, 8
 jr $ra
 add $sp, $sp, 8
-.globl main
 main:
 sub $sp, $sp, 8
 sw $ra, 4($sp)
@@ -48,8 +50,5 @@ li $v0, 11
 li $a0, 10
 syscall
 move $v0, $zero  # return valor
-move $sp, $fp
-lw $fp, 0($sp)
-lw $ra, 4($sp)
-add $sp, $sp, 8
-jr $ra
+li $v0, 10
+syscall
