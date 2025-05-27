@@ -8,6 +8,7 @@ output = []
 offsets = {}  # { varName: offset }
 offset_actual = 0
 label_count = 0
+current_function_name = None
 
 
 def nueva_etiqueta():
@@ -68,6 +69,10 @@ def codeGen(AST, filename):
     data_section = generar_data_section()
     output.extend(data_section)
     output.append(".text")
+    output.append(".globl main")
+    # Salto inicial a main para garantizar el punto de entrada
+    output.append("j main")
+    output.append("nop")
 
     # Primero generar todas las funciones excepto main
     for nodo in AST:
@@ -124,7 +129,6 @@ def codeGen(AST, filename):
                             offset_actual -= 4
                         offsets[entry['nombre']] = offset_actual
 
-            output.append(".globl main")
             output.append("main:")
             genFun(nodo, is_main=True)
 
@@ -134,6 +138,8 @@ def codeGen(AST, filename):
 
 
 def genFun(nodo, is_main=False):
+    global current_function_name
+    current_function_name = nodo.nombre
     output.append("sub $sp, $sp, 8")      # espacio para $fp y $ra
     output.append("sw $ra, 4($sp)")
     output.append("sw $fp, 0($sp)")
@@ -248,12 +254,16 @@ def genStmt(nodo):
         if nodo.retorno:
             valor = genExp(nodo.retorno)
             output.append(f"move $v0, {valor}  # return valor")
-        # Agregar código para limpiar la pila y retornar
-        output.append("move $sp, $fp")
-        output.append("lw $fp, 0($sp)")
-        output.append("lw $ra, 4($sp)")
-        output.append("add $sp, $sp, 8")
-        output.append("jr $ra")
+        if current_function_name == 'main':
+            output.append("li $v0, 10")
+            output.append("syscall")
+        else:
+            # Agregar código para limpiar la pila y retornar
+            output.append("move $sp, $fp")
+            output.append("lw $fp, 0($sp)")
+            output.append("lw $ra, 4($sp)")
+            output.append("add $sp, $sp, 8")
+            output.append("jr $ra")
         return  # Detener generación tras return
 
 
