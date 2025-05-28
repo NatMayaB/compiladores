@@ -199,6 +199,9 @@ lw $t9, -36($fp)  # cargar var local maximo
 lw $t0, -32($fp)  # cargar var local total
 add $t1, $t9, $t0
 move $v0, $t1  # return valor
+move $a0, $v0
+li $v0, 1
+syscall
 li $v0, 10
 syscall
 add $sp, $sp, 36
