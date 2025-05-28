@@ -255,6 +255,10 @@ def genStmt(nodo):
             valor = genExp(nodo.retorno)
             output.append(f"move $v0, {valor}  # return valor")
         if current_function_name == 'main':
+            # Print the returned value before exiting
+            output.append("move $a0, $v0")
+            output.append("li $v0, 1")
+            output.append("syscall")
             output.append("li $v0, 10")
             output.append("syscall")
         else:
