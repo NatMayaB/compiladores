@@ -1,13 +1,47 @@
-int x;
-int y;
+int max(int a, int b) {
+  if (a > b) {
+    return a;
+  } else {
+    return b;
+  }
+}
 
 int suma(int a, int b) {
   return a + b;
 }
 
-int main(void) {
-  x = 5;
-  y = suma(x, 3);
-  return output(y);
+int main() {
+  int A[5];
+  int i;
+  int z;
+  int total;
+  int maximo;
 
+  A[0] = 3;
+  A[1] = 6;
+  A[2] = 1;
+  A[3] = 8;
+  A[4] = 2;
+
+  i = 0;
+  total = 0;
+  maximo = A[0];
+
+  while (i < 5) {
+    if (A[i] > 5) {
+      total = suma(total, A[i]);
+
+      if (A[i] < 10) {           
+        z = suma(i, A[i]);
+        total = suma(total, z);
+      }
+    } else {
+      total = total + 1;
+    }
+
+    maximo = max(maximo, A[i]);
+    i = i + 1;
+  }
+
+  return maximo + total;
 }
