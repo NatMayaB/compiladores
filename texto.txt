@@ -1,3 +1,4 @@
+/*Código de prueba obtenido de Sylvia*/
 int max(int a, int b) {
   if (a > b) {
     return a;

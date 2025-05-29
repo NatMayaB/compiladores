@@ -1,7 +1,7 @@
 from globalTypes import *
 from parser import *
 import semantica
-from cgenFer import *
+from cgen import *
 from lexer import *
 
 f = open("texto.txt", "r")
@@ -13,5 +13,5 @@ posicion = 0
 globales(programa, posicion, progLong)
 
 AST = parser(False)
-semantica.verificar_errores(AST)
+semantica.tabla(AST)  # Imprime las tablas de símbolos
 codeGen(AST, "salida.s")
